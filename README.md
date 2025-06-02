@@ -1,5 +1,4 @@
 # Web_services_SOAP_WSDL_with_Spring-
-# SOAP Banque Web Service Project
 
 A project to demonstrate and test SOAP web services using Jakarta EE (JAX-WS) for a simple banking system.
 
