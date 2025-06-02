@@ -1,215 +1,169 @@
 # Web_services_SOAP_WSDL_with_Spring-
 
-A project to demonstrate and test SOAP web services using Jakarta EE (JAX-WS) for a simple banking system.
+# WS SOAP
 
-## Author
-
-- **Name:** Tajeddine Bouhrim
-- **Filière:** Master SDIA
-
----
-
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Features](#features)
-- [Installation](#installation)
-- [Important: wsimport Tool Compatibility](#important-wsimport-tool-compatibility)
-- [Usage](#usage)
-- [Technologies Used](#technologies-used)
-- [Project Structure](#project-structure)
-- [Setup Instructions](#setup-instructions)
-- [Testing](#testing)
-- [Screenshots](#screenshots)
-- [License](#license)
+* **Nom :** EL KHELYFY  
+* **Prénom :** Imad  
+* **Filière :** Master en Intelligence Artificielle et Sciences de Données  
+* **Université :** Faculté des Sciences, Université Moulay Ismail Meknès  
 
 ---
 
-## Introduction
+## **1- Introduction :**
 
-This project is part of the Master SDIA program, for the course Distributed Systems and Middleware. It implements a simple SOAP web service for banking operations (account management and currency conversion) using Jakarta EE and JAX-WS.
+Dans le cadre de ce projet, nous avons développé un service web SOAP en Java permettant de convertir des montants en euros vers le dirham marocain, ainsi que de consulter un compte bancaire ou une liste de comptes. Le service a été déployé à l’aide d’un serveur JAX-WS simple. Nous avons analysé le fichier WSDL généré via un navigateur HTTP, puis testé les opérations du service avec l’outil SoapUI. Enfin, nous avons créé un client Java utilisant le stub généré à partir du WSDL pour interagir avec le service web de manière programmatique.
 
----
+`JAX-WS (Java API for XML Web Services)` est une API Java qui permet de créer et d'implémenter des services web `SOAP` de manière simple et standardisée. Elle fait partie de la plateforme `Java EE` (anciennement J2EE) et facilite le développement de services web basés sur le protocole SOAP.
 
-## Features
-
-- Currency conversion (Euro to Dirham)
-- Retrieve a single account by code
-- List all accounts
-- Exposes SOAP endpoints using Jakarta EE (JAX-WS)
-- Client application to consume the web service
+**Fonctionnalités principales de JAX-WS :**
+- Création facile de services web SOAP en ajoutant des annotations Java.
+- Génération automatique du `WSDL (Web Services Description Language)`.
+- Gestion des échanges de messages SOAP via des méthodes Java.
+- Support de la sécurité, des sessions, et des handlers pour personnaliser les requêtes/réponses.
 
 ---
 
-## Installation
+## **2- Énoncé :**
 
-Clone the repository:
+1. Créer un Web service qui permet de :
+   - Convertir un montant de l’euro en dirham (DH)
+   - Consulter un Compte
+   - Consulter une Liste de comptes  
+2. Déployer le Web service avec un simple Serveur JAX-WS  
+3. Consulter et analyser le WSDL avec un navigateur HTTP  
+4. Tester les opérations du web service avec un outil comme SoapUI  
+5. Créer un Client SOAP Java :
+   - Générer le Stub à partir du WSDL
+   - Créer un client SOAP pour le web service  
 
-```sh
-git clone https://github.com/scorpionTaj/WebServiceSOAPBanque2.git
+---
+
+## **3- Implémentation :**
+
+### 1. La classe `Compte.java`
+
+```java
+package ws.entities;
+
+import java.util.Date;
+
+public class Compte {
+    private int code;
+    private double solde;
+    private Date dateCreation;
+
+    public Compte(int code, double solde, Date dateCreation) {
+        this.code = code;
+        this.solde = solde;
+        this.dateCreation = dateCreation;
+    }
+
+    public Compte() {}
+
+    public void setCode(int code) { this.code = code; }
+    public void setDateCreation(Date dateCreation) { this.dateCreation = dateCreation; }
+    public void setSolde(double solde) { this.solde = solde; }
+
+    public int getCode() { return code; }
+    public double getSolde() { return solde; }
+    public Date getDateCreation() { return dateCreation; }
+}
+```
+### Explication :
+
+- ode : identifiant du compte
+
+- solde : montant disponible
+
+- dateCreation : date de création du compte
+
+### 2. La classe BanqueService.jav
+
+```java
+package ws;
+
+import jakarta.jws.WebMethod;
+import jakarta.jws.WebParam;
+import jakarta.jws.WebService;
+import ws.entities.Compte;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Arrays;
+
+@WebService(serviceName = "BanqueWS")
+public class BanqueService {
+    @WebMethod(operationName = "ConversionEuroToDH")
+    public double conversion(@WebParam(name="Montant") double mt){
+        return mt * 11;
+    }
+
+    @WebMethod()
+    public Compte getCompte(@WebParam(name = "code") int code){
+        return new Compte(code, Math.random() * 6800, new Date());
+    }
+
+    @WebMethod()
+    public List<Compte> listComptes(){
+        return Arrays.asList(
+            new Compte(1, Math.random() * 6800, new Date()),
+            new Compte(2, Math.random() * 6800, new Date()),
+            new Compte(3, Math.random() * 6800, new Date())
+        );
+    }
+}
+
+```
+### 3. La classe ServerJWS.java
+
+```java
+package ws;
+
+import jakarta.xml.ws.Endpoint;
+
+public class ServerJWS {
+    public static void main(String[] args) {
+        String url = "http://0.0.0.0:9090/";
+        Endpoint.publish(url, new BanqueService());
+        System.out.println("Web service déployé sur l’URL " + url);
+    }
+}
+
+```
+### 4. Le client Java Main.java (dans module client-soap-java)
+
+```java
+package ws;
+
+import proxy.BanqueService;
+import proxy.BanqueWS;
+import proxy.Compte;
+
+public class Main {
+    public static void main(String[] args) {
+        BanqueService proxy = new BanqueWS().getBanqueServicePort();
+        System.out.println("Méthode conversion EuroToDH : " + proxy.conversionEuroToDH(98));
+
+        System.out.println("*************** Consulter un compte ***************");
+        Compte compte = proxy.getCompte(1);
+        System.out.println(compte.getCode());
+        System.out.println(compte.getSolde());
+        System.out.println(compte.getDateCreation());
+
+        System.out.println("*************** Liste des comptes ***************");
+        proxy.listComptes().forEach(c -> {
+            System.out.println("Code : " + c.getCode() + " | Solde : " + c.getSolde() + " | Date : " + c.getDateCreation());
+        });
+    }
+}
+
 ```
 
-Navigate to the project directory:
+### 4- Conclusion :
 
-```sh
-cd WebServiceSOAPBanque2
+```markdown
+Ce travail pratique a permis de mettre en œuvre un service web SOAP avec JAX-WS, incluant la conversion de devises et la gestion des comptes bancaires. Le déploiement sur un serveur intégré, l’analyse du WSDL et les tests avec SoapUI ont validé le bon fonctionnement du service. La création d’un client Java à partir du WSDL a également été réalisée, assurant ainsi une intégration complète et fonctionnelle du système.
 ```
 
-Install dependencies:
-
-```sh
-mvn clean install
-```
-
----
-
-## Important: wsimport Tool Compatibility
-
-> **Note:**  
-> Do **not** use the standard `wsimport` tool from the JDK, as it generates proxy files with `javax` packages, which are incompatible with Jakarta EE (`jakarta` packages).  
->  
-> Instead, **download the Metro JAX-WS RI** (which includes the correct `wsimport` for Jakarta EE) from:  
-> [https://eclipse-ee4j.github.io/metro-jax-ws/](https://eclipse-ee4j.github.io/metro-jax-ws/)  
->  
-> After downloading and extracting, use the `wsimport` from the `bin` directory of Metro JAX-WS RI.
-
----
-
-## Usage
-
-### Start the Web Service
-
-Run the server:
-
-```sh
-mvn exec:java -Dexec.mainClass="ma.server.ServerJWS"
-```
-
-The web service will be available at:  
-`http://localhost:8080/BanqueWS?wsdl`
-
-### Generate Client Proxy Classes
-
-Use the Jakarta Metro `wsimport` tool **from Metro JAX-WS RI** (see above):
-
-```sh
-path\to\jaxws-ri\bin\wsimport.bat -keep -p ma.proxy -s src/main/java http://localhost:8080/BanqueWS?wsdl
-```
-
-### Run the Client
-
-```sh
-mvn exec:java -Dexec.mainClass="ma.client.ClientWS"
-```
-
----
-
-## Technologies Used
-
-- Java 21+
-- Jakarta EE (JAX-WS 4.x)
-- Maven
-- Metro JAX-WS RI
-- IntelliJ IDEA
-
----
-
-## Project Structure
-
-- `ma/service/Compte.java`: Account entity (JavaBean)
-- `ma/service/BanqueService.java`: Web service implementation
-- `ma/server/ServerJWS.java`: Publishes the web service
-- `ma/proxy/`: Generated client proxy classes
-- `ma/client/ClientWS.java`: Client application
-
----
-
-## Setup Instructions
-
-### Prerequisites
-
-- Java 21 or higher
-- Maven
-- Metro JAX-WS RI 4.x (for Jakarta wsimport)
-- Any IDE (IntelliJ IDEA, Eclipse, VS Code, etc.)
-
-### Steps
-
-1. Clone the repository and open in your IDE.
-2. Start the server (`ServerJWS`).
-3. Generate client proxies using the Jakarta `wsimport`.
-4. Run the client (`ClientWS`).
-
----
-
-## Testing
-
-The client application (`ClientWS`) demonstrates:
-
-- Currency conversion
-- Retrieving a single account
-- Listing all accounts
-
-### Testing with SoapUI
-
-You can also test the SOAP web service functions using [SoapUI](https://www.soapui.org/):
-
-1. Start the server (`ServerJWS`).
-2. Open SoapUI and create a new SOAP project.
-3. Enter the WSDL URL:  
-   `http://localhost:8080/BanqueWS?wsdl`
-4. SoapUI will generate requests for all available operations.
-5. Test the following functions:
-   - **convert**: Provide an amount in Euro and receive the converted value in Dirham.
-   - **getCompte**: Provide an account code to retrieve account details.
-   - **listComptes**: Retrieve the list of all accounts.
-6. Inspect the SOAP requests and responses in SoapUI for validation.
-
----
-
-## Screenshots
-
-Below are some screenshots demonstrating the main features:
-
-### 1. Web Service WSDL
-
-![Web Service WSDL](images/Web_Services.png)
-![WSDL Screenshot](images/wsdl.png)
-
-### 2. Server Running
-
-![Server Console](images/server_running.png)
-
-### 3. Client Output
-
-![Client Output](images/client_output.png)
-
-### 4. Project Structure in IntelliJ IDEA
-
-![Project Structure](images/project_structure.png)
-
-### 5. SoapUI Testing
-
-#### a. SoapUI Project with Operations
-
-![SoapUI Project](images/soapui_project1.png)
-![SoapUI Project](images/soapui_project2.png)
-
-#### b. Example: convert Operation Request/Response
-
-![SoapUI Convert Operation](images/soapui_convert.png)
-
-#### c. Example: getCompte Operation Request/Response
-
-![SoapUI getCompte Operation](images/soapui_getCompte.png)
-
-#### d. Example: listComptes Operation Request/Response
-
-![SoapUI listComptes Operation](images/soapui_listComptes.png)
-
----
-
----
-
-👨‍💻 Réalisé par : **IMAD EL KHELYFY**  
-🎓 Activité Pratique N°4 - Web services SOAP WSDL
+### 5- Auteur
+EL KHELYFY Imad
