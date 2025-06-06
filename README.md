@@ -1,155 +1,182 @@
 
-# Web_services_SOAP_WSDL_with_Spring-
+# 🌐 Web Services SOAP avec WSDL en Java
 
-## WS SOAP
-
-**Nom :** EL KHELYFY  
-**Prénom :** Imad  
-**Filière :** Master en Intelligence Artificielle et Sciences de Données  
-**Université :** Faculté des Sciences, Université Moulay Ismail Meknès  
+> 🚀 Projet complet pour comprendre, développer et consommer un service web SOAP basé sur JAX-WS avec génération de WSDL et client SOAP Java.
 
 ---
 
-## 1- Introduction
+## 👨‍🎓 Informations de l’auteur
 
-Ce projet démontre la création d’un service web SOAP en Java avec JAX-WS. Il convertit un montant en euros vers le dirham marocain et permet la consultation de comptes bancaires (unitaire ou liste).
-
-**JAX-WS (Java API for XML Web Services)** permet de :
-- Créer facilement des services SOAP via des annotations Java.
-- Générer automatiquement un fichier `WSDL`.
-- Manipuler les messages SOAP avec des objets Java (marshalling/unmarshalling).
-- Faciliter le client via la génération de STUB (proxy).
+- **👤 Nom & Prénom :** EL KHELYFY Imad  
+- **🎓 Filière :** Master en Intelligence Artificielle et Sciences des Données  
+- **🏫 Université :** Faculté des Sciences, Université Moulay Ismail, Meknès  
 
 ---
 
-## 2- Objectifs
+## 📌 Objectif du projet
 
-1. Créer un service Web qui permet de :
-   - ✅ Convertir Euro → Dirham
-   - ✅ Consulter un compte bancaire
-   - ✅ Afficher une liste de comptes
-2. Déployer avec un serveur JAX-WS
-3. Analyser le WSDL dans un navigateur
-4. Tester le service avec SoapUI
-5. Générer un client Java SOAP via le WSDL
+Ce projet met en œuvre un service web **SOAP** permettant :
+
+- 💱 La **conversion de montants en Euro vers Dirham (MAD)**
+- 🧾 La **consultation d’un compte bancaire**
+- 📋 L’affichage de **tous les comptes**  
+- Le tout exposé à travers un **WSDL généré dynamiquement** par JAX-WS.
 
 ---
 
-## 3- Architecture générale
+## 🧠 Concepts abordés
 
-- 📦 `ws.soap` → Backend Java avec `BanqueService`
-- 💻 `client-soap-java` → Client SOAP qui consomme le service via les classes STUB
-- 🌐 `http://localhost:9090/BanqueService?wsdl` → WSDL généré automatiquement
-
----
-
-## 4- Concepts techniques
-
-### ✅ WSDL
-Un document XML qui **décrit les services Web** : types, opérations, messages, bindings et endpoint.
-
-### ✅ STUB / SKELETON
-- **STUB** : Code généré côté client qui simule le serveur pour interagir facilement.
-- **SKELETON** : (ancien concept côté serveur) utilisé pour interpréter l'appel SOAP et invoquer les méthodes.
-
-### ✅ JAXB (Java Architecture for XML Binding)
-Permet de **lier automatiquement les classes Java ↔ XML** (marshalling/unmarshalling).
-
-#### ⚙️ Quelques annotations JAXB utiles :
-| Annotation         | Rôle |
-|--------------------|------|
-| `@XmlRootElement`  | Associe une classe à un élément XML |
-| `@XmlElement`      | Marque une propriété comme élément XML |
-| `@XmlAttribute`    | Marque une propriété comme attribut XML |
-| `@XmlTransient`    | Exclut un champ de la sérialisation |
-| `@XmlSchema`       | Définit un espace de nommage global |
-| `@XmlAccessorType` | Contrôle comment les propriétés sont exposées |
-
-### ✅ JAX-WS
-API pour créer des services Web SOAP en Java via des annotations comme :
-- `@WebService`
-- `@WebMethod`
-- `@WebParam`
+| 🔧 Concept | 💬 Description |
+|-----------|----------------|
+| **SOAP** | Protocole basé sur XML pour les échanges de données entre applications |
+| **WSDL** | Langage de description d’interface du Web Service |
+| **JAX-WS** | API Java pour créer et publier des Web Services SOAP |
+| **JAXB** | API de liaison Java ↔ XML (marshalling/unmarshalling) |
+| **Stub** | Code client auto-généré pour accéder au Web Service |
+| **Skeleton** | Code serveur auto-généré pour traiter les requêtes SOAP |
+| **OXM** | Object-XML Mapping, utilisé avec JAXB |
+| **Middleware** | Logiciel intermédiaire (ici, le serveur SOAP) qui relie client et service |
 
 ---
 
-## 5- Extrait de Code
+## 🔖 Annotations JAXB principales
 
-### 🧮 Service : BanqueService.java
-```java
-@WebService(serviceName = "BanqueWS")
-public class BanqueService {
-    @WebMethod
-    public double conversion(@WebParam(name="Montant") double mt) {
-        return mt * 11;
-    }
+| Annotation | Utilité |
+|------------|---------|
+| `@XmlRootElement` | Indique l’élément racine XML |
+| `@XmlElement` | Convertit un champ en élément XML |
+| `@XmlAttribute` | Convertit un champ en attribut XML |
+| `@XmlTransient` | Ignore le champ dans l’export XML |
+| `@XmlAccessorType` | Définit comment JAXB accède aux propriétés |
+| `@XmlSchema` | Associe un namespace à un package |
 
-    @WebMethod
-    public Compte getCompte(@WebParam(name = "code") int code) {
-        return new Compte(code, Math.random() * 6800, new Date());
-    }
+---
 
-    @WebMethod
-    public List<Compte> listComptes() {
-        return Arrays.asList(
-            new Compte(1, Math.random() * 6800, new Date()),
-            new Compte(2, Math.random() * 6800, new Date())
-        );
-    }
-}
+## ⚙️ Technologies utilisées
+
+- Java 24
+- Maven
+- JAX-WS (SOAP)
+- JAXB
+- IntelliJ IDEA
+- SoapUI
+- Git & GitHub
+
+---
+
+## 📁 Structure du projet
+
+```
+📦 ws_soap
+ ┣ 📂 client-soap-java
+ ┃ ┗ 📄 Main.java
+ ┣ 📂 src/main/java/ws
+ ┃ ┣ 📄 Compte.java
+ ┃ ┣ 📄 BanqueService.java
+ ┃ ┗ 📄 ServerJWS.java
+ ┣ 📂 Screene
+ ┃ ┗ 📸 Captures d’écran
+ ┣ 📄 README.md
+ ┗ 📄 pom.xml
 ```
 
-### 🧪 Test client : Main.java
+---
+
+## 🧪 Fonctionnalités du service
+
+- `conversionEuroToDH(montant: double) : double`  
+- `getCompte(code: int) : Compte`  
+- `listComptes() : List<Compte>`  
+
+---
+
+## 🛠️ Déploiement du Web Service
+
+```java
+Endpoint.publish("http://0.0.0.0:9090/", new BanqueService());
+```
+
+📎 Naviguez ensuite vers :  
+[http://localhost:9090/BanqueService?wsdl](http://localhost:9090/BanqueService?wsdl)
+
+---
+
+## 🧾 Exemple de WSDL généré
+
+Le WSDL contient :
+- Les types (`Compte`)
+- Les messages (`getCompte`, `conversionEuroToDH`)
+- Les opérations
+- Le `binding` et l’`endpoint`
+
+---
+
+## 🧰 Génération du stub avec `wsimport`
+
+```bash
+wsimport -keep -p proxy http://localhost:9090/BanqueService?wsdl
+```
+
+✅ Les classes générées (stub) permettent au **client SOAP Java** d’appeler facilement le web service.
+
+---
+
+## 🖥️ Exemple de client Java (Main.java)
+
 ```java
 BanqueService proxy = new BanqueWS().getBanqueServicePort();
 System.out.println(proxy.conversionEuroToDH(90));
-Compte c = proxy.getCompte(4);
-System.out.println(c.getCode() + " " + c.getSolde());
 ```
 
 ---
 
-## 6- Déploiement et Consommation
+## 📸 7. Captures d’écran
 
-- 🌐 Lancement via `ServerJWS.java`
-- 🔗 Accès WSDL : `http://localhost:9090/BanqueService?wsdl`
-- 🧪 Test via SoapUI
-- 🛠️ Génération du STUB via `wsimport` ou Maven `jaxws-maven-plugin`
-
----
-
-## 7- Captures d’écran
-
-### ✔️ Interface SOAPUI : Méthode getCompte
-![getCompte](Screene/getcompte .png)
-
-### ✔️ Interface SOAPUI : Liste comptes
-![listeComptes](Screene/listecompte.png)
-
-### ✔️ Visualisation du WSDL
-![WSDL](Screene/localhost wsdl.png)
-
-### ✔️ Code du STUB Proxy
-![proxy](Screene/PROXEY .png)
-
-### ✔️ Interface Web de test
-![web](Screene/Services web .png)
-
-### ✔️ Conversion Euro → MAD
-![conversion](Screene/SOUP interafec , convert euro to mad.png)
-
-### ✔️ Client Java
-![client](Screene/proxey consuler client ....png)
+| Capture | Description |
+|--------|-------------|
+| ![](Screene/getcompte .png) | Résultat de `getCompte` dans SoapUI |
+| ![](Screene/listecompte.png) | Liste des comptes SOAP |
+| ![](Screene/localhost wsdl.png) | Aperçu du fichier WSDL |
+| ![](Screene/PROXEY .png) | Code du stub (proxy généré) |
+| ![](Screene/Services web .png) | Page de test des services |
+| ![](Screene/SOUP interafec , convert euro to mad.png) | Test `convertEuroToDH` via SoapUI |
+| ![](Screene/proxey consuler client ....png) | Appel client Java au web service |
 
 ---
 
-## 8- Conclusion
+## ✅ Résultat attendu dans la console
 
-Ce mini-projet présente une implémentation complète d’un **web service SOAP en Java**. Il met en pratique les concepts de **WSDL**, **JAX-WS**, **JAXB** et **SOAP** avec un client Java et des tests manuels. Il illustre clairement l'interopérabilité offerte par SOAP dans un contexte métier.
+```
+Méthode conversion EuroToDH : 990.0
+*************** Consulter un compte ***************
+1
+6540.23
+2025-06-06
+*************** Liste des comptes ***************
+Code : 1 | Solde : 4550.0 | Date : 2025-06-06
+...
+```
 
 ---
 
-## Auteur
+## ✅ Résumé
 
-**EL KHELYFY Imad**  
-Master IASD – Faculté des Sciences, Meknès  
+Ce projet illustre toutes les étapes essentielles de création, déploiement, test et consommation d’un Web Service SOAP :
+- Construction avec **JAX-WS**
+- Sérialisation via **JAXB**
+- Génération de **WSDL**
+- Tests avec **SoapUI**
+- Génération et usage d’un **client proxy Java**
+- Mise en ligne du projet sur **GitHub**
+
+---
+
+## 🔚 Auteur
+
+> **EL KHELYFY Imad**  
+Master IASD — Université Moulay Ismail  
+[GitHub](https://github.com/IMADKHKHALIFI)
+
+---
+
+🛠️ *Dernière mise à jour : Juin 2025*
