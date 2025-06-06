@@ -174,25 +174,26 @@ Ce projet illustre toutes les étapes essentielles de création, déploiement, t
 ## 7- Captures d’écran
 
 ### ✔️ Interface SOAPUI : Méthode `getCompte`
-![getCompte](Screene/getcompte.png)
+![getCompte](Screnne/getcompte.png)
 
 ### ✔️ Interface SOAPUI : Méthode `listComptes`
-![listComptes](Screene/listecompte.png)
+![listComptes](Screnne/listecompte.png)
 
 ### ✔️ Visualisation du fichier `WSDL`
-![WSDL](Screene/localhost_wsdl.png)
+![WSDL](Screnne/localhost_wsdl.png)
 
 ### ✔️ Code Proxy (STUB généré à partir du WSDL)
-![Proxy](Screene/proxy.png)
+![Proxy](Screnne/proxy.png)
 
 ### ✔️ Interface Web de test des services SOAP
-![Interface Web](Screene/services_web.png)
+![Interface Web](Screnne/services_web.png)
 
 ### ✔️ Méthode `conversionEuroToDH` dans SoapUI
-![Conversion Euro MAD](Screene/conversion_euro_mad.png)
+![Conversion Euro MAD](Screnne/conversion_euro_mad.png)
 
 ### ✔️ Exécution du client Java SOAP (appel via Proxy)
-![Client Java](Screene/proxy_consumer_client.png)
+![Client Java](Screnne/proxy_consumer_client.png)
+
 
 ## 🔚 Auteur
 
