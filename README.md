@@ -1,3 +1,4 @@
+
 # Web_services_SOAP_WSDL_with_Spring-
 
 # WS SOAP
@@ -69,15 +70,16 @@ public class Compte {
     public Date getDateCreation() { return dateCreation; }
 }
 ```
+
 ### Explication :
 
-- ode : identifiant du compte
-
+- code : identifiant du compte
 - solde : montant disponible
-
 - dateCreation : date de création du compte
 
-### 2. La classe BanqueService.jav
+---
+
+### 2. La classe `BanqueService.java`
 
 ```java
 package ws;
@@ -112,9 +114,11 @@ public class BanqueService {
         );
     }
 }
-
 ```
-### 3. La classe ServerJWS.java
+
+---
+
+### 3. La classe `ServerJWS.java`
 
 ```java
 package ws;
@@ -128,9 +132,11 @@ public class ServerJWS {
         System.out.println("Web service déployé sur l’URL " + url);
     }
 }
-
 ```
-### 4. Le client Java Main.java (dans module client-soap-java)
+
+---
+
+### 4. Le client Java `Main.java` (dans module client-soap-java)
 
 ```java
 package ws;
@@ -156,14 +162,27 @@ public class Main {
         });
     }
 }
-
 ```
 
-### 4- Conclusion :
+---
 
-```markdown
+### 5- Conclusion :
+
 Ce travail pratique a permis de mettre en œuvre un service web SOAP avec JAX-WS, incluant la conversion de devises et la gestion des comptes bancaires. Le déploiement sur un serveur intégré, l’analyse du WSDL et les tests avec SoapUI ont validé le bon fonctionnement du service. La création d’un client Java à partir du WSDL a également été réalisée, assurant ainsi une intégration complète et fonctionnelle du système.
-```
 
-### 5- Auteur
-EL KHELYFY Imad
+---
+
+### 6- Auteur :
+
+**EL KHELYFY Imad**
+
+---
+
+### 7- Captures d’écran :
+- ![](Screene/getcompte .png)
+- ![](Screene/listecompte.png)
+- ![](Screene/localhost wsdl.png)
+- ![](Screene/PROXEY .png)
+- ![](Screene/Services web .png)
+- ![](Screene/SOUP interafec , convert euro to mad.png)
+- ![](Screene/proxey consuler client ....png)
