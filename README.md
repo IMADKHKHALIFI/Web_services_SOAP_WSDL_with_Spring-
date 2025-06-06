@@ -198,9 +198,7 @@ Ce projet illustre toutes les étapes essentielles de création, déploiement, t
 ## 🔚 Auteur
 
 > **EL KHELYFY Imad**  
-Master IASD — Université Moulay Ismail  
+Master SDIA — Université Moulay Ismail  
 [GitHub](https://github.com/IMADKHKHALIFI)
 
----
 
-🛠️ *Dernière mise à jour : Juin 2025*
